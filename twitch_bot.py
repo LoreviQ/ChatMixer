@@ -13,9 +13,9 @@ class Bot(commands.Bot):
 
     def __init__(self):
         super().__init__(
-            token=os.environ["ACCESS_TOKEN"],
+            token=os.environ.get("TWITCH_ACCESS_TOKEN"),
             prefix="!",
-            initial_channels=[os.environ["CHANNEL"]],
+            initial_channels=[os.environ.get("TWITCH_CHANNEL")],
         )
 
     async def event_ready(self):
