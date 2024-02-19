@@ -1,9 +1,16 @@
+"""Contains class for Twitch Bot"""
+
 import os
 
 from twitchio.ext import commands
 
 
 class Bot(commands.Bot):
+    """
+    Creates a subclass of the twitchio.ext.commands.Bot class
+    Initialises the bot based on .env variables
+    """
+
     def __init__(self):
         super().__init__(
             token=os.environ["ACCESS_TOKEN"],
@@ -17,6 +24,7 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def hello(self, context: commands.Context):
+        """Command triggered when any user types !hello"""
         await context.send(f"Hello {context.author.name}!")
 
 
