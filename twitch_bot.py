@@ -27,7 +27,7 @@ class Bot(commands.Bot):
         """Method called upon any message"""
         if message.echo:
             return
-        print(message.content)
+        print(f"{message.author}: {message.content}")
 
         # handles the commands within the message (e.g. !hello)
         await self.handle_commands(message)
