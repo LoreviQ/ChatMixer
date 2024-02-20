@@ -1,5 +1,9 @@
 """Contains the Logger class"""
 
+import time
+
+from gui import GUI
+
 
 class Logger:
     """
@@ -7,8 +11,9 @@ class Logger:
     platforms. Serves as an abstraction for the logging.
     """
 
-    def __init__(self, client=None):
-        self.db_client = client
+    def __init__(self, db=None, gui=None):
+        self.db_client = db
+        self.gui = gui
 
     def log_message(self, uname, platform, message):
         """
@@ -22,3 +27,5 @@ class Logger:
         print(f"[{platform}] {uname}: {message}")
         if self.db_client:
             self.db_client.add_message(uname, platform, message)
+        if self.gui:
+            self.gui.add_line(f"[{platform}] {uname}: {message}")

@@ -4,12 +4,14 @@ import asyncio
 
 from db_client import MDBclient
 from discord_bot import DiscordBot
+from gui import GUI
 from logger import Logger
 from twitch_bot import TwitchBot
 
 if __name__ == "__main__":
     db = MDBclient()
-    logger = Logger(db)
+    # gui = GUI()
+    logger = Logger(db=db)
     discordBot = DiscordBot(logger)
     twitchBot = TwitchBot(logger)
 

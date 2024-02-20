@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e3d1f39e58a7aed26630d08f07735c97e70f7f06abd15e529f6999ba308a2400"
+            "sha256": "00755c167308d448ae48d60628ef23bda3866c37d5c27d4b8bf3887f82858811"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -105,6 +105,13 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==1.3.1"
+        },
+        "aiotkinter": {
+            "hashes": [
+                "sha256:99c324d150b8d1d7af4b47b953348cfeff23c6975efa42c8f78d44fdf626a6a2"
+            ],
+            "index": "pypi",
+            "version": "==0.2"
         },
         "attrs": {
             "hashes": [
@@ -422,6 +429,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==1.0.1"
+        },
+        "screeninfo": {
+            "hashes": [
+                "sha256:9983076bcc7e34402a1a9e4d7dabf3729411fd2abb3f3b4be7eba73519cd2ed1",
+                "sha256:e97d6b173856edcfa3bd282f81deb528188aff14b11ec3e195584e7641be733c"
+            ],
+            "index": "pypi",
+            "markers": "python_full_version >= '3.6.2' and python_full_version < '4.0.0'",
+            "version": "==0.8.1"
         },
         "twitchio": {
             "hashes": [

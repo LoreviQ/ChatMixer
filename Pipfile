@@ -8,6 +8,8 @@ pymongo = "*"
 twitchio = "*"
 python-dotenv = "*"
 "discord.py" = "*"
+screeninfo = "*"
+aiotkinter = "*"
 
 [dev-packages]
 
