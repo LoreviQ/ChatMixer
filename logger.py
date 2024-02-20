@@ -19,5 +19,6 @@ class Logger:
             platform: Name of the platform (String)
             message: Contents of the message (String)
         """
+        print(f"[{platform}] {uname}: {message}")
         if self.db_client:
             self.db_client.add_message(uname, platform, message)

@@ -18,7 +18,7 @@ class DiscordBot(discord.Client):
         super().__init__(intents=intents)
         self.platform = "Discord"
         self.logger = logger
-        self.run(os.getenv("DISCORD_TOKEN"))
+        self.token = os.getenv("DISCORD_TOKEN")
 
     async def on_ready(self):
         """Method called when the Bot has successfully connected"""
@@ -34,7 +34,7 @@ class DiscordBot(discord.Client):
         if message.author == self.user:
             return
         if self.logger:
-            self.logger.log_message(message.author, self.platform, message.content)
+            self.logger.log_message(message.author.name, self.platform, message.content)
 
 
 if __name__ == "__main__":

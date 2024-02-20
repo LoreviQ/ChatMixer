@@ -32,11 +32,15 @@ class MDBclient(pymongo.MongoClient):
         Raises:
             ValueError: If platform does not match a supported platform
         """
-        collection = self[self.db]['users']
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
-        if platform == "Twitch":
-            if collection.find_one({"twitch_uname": uname}):
-                _id = collection.find_one({"twitch_uname": uname})["_id"]
+        platforms = {
+            "Twitch": "twitch_uname",
+            "Discord": "discord_uname"
+        }
+        if platform in platforms:
+            collection = self[self.db]['users']
+            now = datetime.datetime.now(tz=datetime.timezone.utc)
+            if collection.find_one({platforms[platform]: uname}):
+                _id = collection.find_one({platforms[platform]: uname})["_id"]
                 collection.update_one(
                     {"_id": _id},
                     {"$set": {"updated_date": now}}
@@ -44,7 +48,7 @@ class MDBclient(pymongo.MongoClient):
             else:
                 user_document = {
                     "user": uname,
-                    "twitch_uname": uname,
+                    platforms[platform]: uname,
                     "created_date": now,
                     "updated_date": now
                 }
