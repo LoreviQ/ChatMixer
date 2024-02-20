@@ -2,6 +2,7 @@
 
 import os
 
+from dotenv import load_dotenv
 from twitchio.ext import commands
 
 
@@ -12,10 +13,11 @@ class Bot(commands.Bot):
     """
 
     def __init__(self):
+        load_dotenv()
         super().__init__(
-            token=os.environ.get("TWITCH_ACCESS_TOKEN"),
+            token=os.getenv("TWITCH_ACCESS_TOKEN"),
             prefix="!",
-            initial_channels=[os.environ.get("TWITCH_CHANNEL")],
+            initial_channels=[os.getenv("TWITCH_CHANNEL")],
         )
 
     async def event_ready(self):
