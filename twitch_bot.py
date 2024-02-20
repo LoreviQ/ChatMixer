@@ -6,19 +6,21 @@ from dotenv import load_dotenv
 from twitchio.ext import commands
 
 
-class Bot(commands.Bot):
+class TwitchBot(commands.Bot):
     """
     Creates a subclass of the twitchio.ext.commands.Bot class
     Initialises the bot based on .env variables
     """
 
-    def __init__(self):
+    def __init__(self, logger=None):
         load_dotenv()
         super().__init__(
             token=os.getenv("TWITCH_ACCESS_TOKEN"),
             prefix="!",
             initial_channels=[os.getenv("TWITCH_CHANNEL")],
         )
+        self.platform = "Twitch"
+        self.logger = logger
 
     async def event_ready(self):
         """Method called when the Bot has successfully connected"""
@@ -29,7 +31,8 @@ class Bot(commands.Bot):
         """Method called upon any message"""
         if message.echo:
             return
-        print(f"{message.author}: {message.content}")
+        if self.logger:
+            self.logger.log_message(message.author.name, self.platform, message.content)
 
         # handles the commands within the message (e.g. !hello)
         await self.handle_commands(message)
@@ -41,5 +44,5 @@ class Bot(commands.Bot):
 
 
 if __name__ == "__main__":
-    bot = Bot()
+    bot = TwitchBot()
     bot.run()
