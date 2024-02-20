@@ -13,43 +13,70 @@ class MDBclient(pymongo.MongoClient):
     Connects to MongoDB database based on .env variables
     """
 
-    def __init__(self):
+    def __init__(self, database = 'ChatDB'):
         load_dotenv()
         super().__init__( f"mongodb://{os.getenv("MONGODB_ADDRESS")}:27017/")
+        self.db = database
 
     def add_user(self, uname, platform):
         """
-        Adds a user to the database
+        Adds a user to the 'users' collection in the 'self.db' database
 
         Args:
             uname: Username of the user (String)
             platform: Name of the platform (String)
 
         Returns:
-            This is a description of what is returned.
+            _id = UID of the user added (or found if already exists)
 
         Raises:
-            KeyError: Raises an exception.
+            ValueError: If platform does not match a supported platform
         """
-        collection = self['ChatDB']['user']
+        collection = self[self.db]['users']
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
         if platform == "Twitch":
             if collection.find_one({"twitch_uname": uname}):
-                print("User already exists")
+                _id = collection.find_one({"twitch_uname": uname})["_id"]
+                collection.update_one(
+                    {"_id": _id},
+                    {"$set": {"updated_date": now}}
+                )
             else:
-                user = {
+                user_document = {
                     "user": uname,
                     "twitch_uname": uname,
-                    "created_date": datetime.datetime.now(tz=datetime.timezone.utc),
+                    "created_date": now,
+                    "updated_date": now
                 }
-                collection.insert_one(user)
-                print("Added user")
-        else:
-            raise ValueError("Unsupported Platform")
+                _id = collection.insert_one(user_document).inserted_id
+            return _id
+        raise ValueError("Unsupported Platform")
+
+    def add_message(self, uname, platform, message):
+        """
+        Adds a message to the 'messages' collection in the 'self.db' database
+
+        Args:
+            uname: Username of the user (String)
+            platform: Name of the platform (String)
+            message: Contents of the message (String)
+        """
+        _id = self.add_user(uname, platform)
+        collection = self[self.db]['messages']
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
+        message_document = {
+            "user_id": _id,
+            "content": message,
+            "platform": platform,
+            "date": now
+        }
+        collection.insert_one(message_document)
 
 
 if __name__ == "__main__":
     db = MDBclient()
-    db.add_user("test101", "Twitch")
-    db.add_user("test101", "Twitch")
-    for document in db['ChatDB']['user'].find():
+    db.add_message("test102", "Twitch", "wow so cool")
+    for document in db[db.db]['users'].find():
+        print(document)
+    for document in db[db.db]['messages'].find():
         print(document)
