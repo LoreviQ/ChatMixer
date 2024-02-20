@@ -28,7 +28,12 @@ class TwitchBot(commands.Bot):
         print(f"User id is | {self.user_id}")
 
     async def event_message(self, message):
-        """Method called upon any message"""
+        """
+        Method called upon any message, logs the message
+
+        Args:
+            message: twitchio message class
+        """
         if message.echo:
             return
         if self.logger:
