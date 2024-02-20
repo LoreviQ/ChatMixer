@@ -22,7 +22,7 @@ class DiscordBot(discord.Client):
 
     async def on_ready(self):
         """Method called when the Bot has successfully connected"""
-        print(f"{self.user} has connected to Discord!")
+        print(f"Connected to {self.platform} as: {self.user}")
 
     async def on_message(self, message):
         """

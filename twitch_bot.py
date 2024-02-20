@@ -24,8 +24,7 @@ class TwitchBot(commands.Bot):
 
     async def event_ready(self):
         """Method called when the Bot has successfully connected"""
-        print(f"Logged in as | {self.nick}")
-        print(f"User id is | {self.user_id}")
+        print(f"Connected to {self.platform} as: {self.nick}")
 
     async def event_message(self, message):
         """
