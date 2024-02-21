@@ -1,9 +1,5 @@
 """Contains the Logger class"""
 
-import time
-
-from gui import GUI
-
 
 class Logger:
     """
@@ -17,7 +13,7 @@ class Logger:
 
     def log_message(self, uname, platform, message):
         """
-        If a db_client exists, adds message to the DB
+        Adds message to the DB and pushes message to GUI
 
         Args:
             uname: Username of the user (String)
