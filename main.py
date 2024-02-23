@@ -10,7 +10,7 @@ from twitch_bot import TwitchBot
 
 if __name__ == "__main__":
     db = MDBclient()
-    # gui = GUI()
+    gui = GUI()
     logger = Logger(db=db)
     discordBot = DiscordBot(logger)
     twitchBot = TwitchBot(logger)
