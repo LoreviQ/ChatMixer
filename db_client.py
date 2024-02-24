@@ -37,24 +37,24 @@ class MDBclient(pymongo.MongoClient):
             "Discord": "discord_uname",
             "Youtube": "youtube_uname"
         }
-        if platform in platforms:
-            collection = self[self.db]['users']
-            if collection.find_one({platforms[platform]: uname}):
-                _id = collection.find_one({platforms[platform]: uname})["_id"]
-                collection.update_one(
-                    {"_id": _id},
-                    {"$set": {"updated_date": timestamp}}
-                )
-            else:
-                user_document = {
-                    "user": uname,
-                    platforms[platform]: uname,
-                    "created_date": timestamp,
-                    "updated_date": timestamp
-                }
-                _id = collection.insert_one(user_document).inserted_id
-            return _id
-        raise ValueError("Unsupported Platform")
+        if platform not in platforms:
+            raise ValueError("Unsupported Platform")
+        collection = self[self.db]['users']
+        if collection.find_one({platforms[platform]: uname}):
+            _id = collection.find_one({platforms[platform]: uname})["_id"]
+            collection.update_one(
+                {"_id": _id},
+                {"$set": {"updated_date": timestamp}}
+            )
+        else:
+            user_document = {
+                "user": uname,
+                platforms[platform]: uname,
+                "created_date": timestamp,
+                "updated_date": timestamp
+            }
+            _id = collection.insert_one(user_document).inserted_id
+        return _id
 
     def add_message(self, uname, platform, message, timestamp=datetime.datetime.now(tz=datetime.timezone.utc)):
         """

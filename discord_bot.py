@@ -36,6 +36,9 @@ class DiscordBot(discord.Client):
         if self.logger:
             self.logger.log_message(message.author.name, self.platform, message.content)
 
+    async def start(self):
+        await super().start(self.token)
+
 
 if __name__ == "__main__":
     load_dotenv()
