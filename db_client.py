@@ -18,7 +18,7 @@ class MDBclient(pymongo.MongoClient):
         super().__init__( f"mongodb://{os.getenv("MONGODB_ADDRESS")}:27017/")
         self.db = database
 
-    def add_user(self, uname, platform):
+    def add_user(self, uname, platform, timestamp):
         """
         Adds a user to the 'users' collection in the 'self.db' database
 
@@ -34,29 +34,29 @@ class MDBclient(pymongo.MongoClient):
         """
         platforms = {
             "Twitch": "twitch_uname",
-            "Discord": "discord_uname"
+            "Discord": "discord_uname",
+            "Youtube": "youtube_uname"
         }
         if platform in platforms:
             collection = self[self.db]['users']
-            now = datetime.datetime.now(tz=datetime.timezone.utc)
             if collection.find_one({platforms[platform]: uname}):
                 _id = collection.find_one({platforms[platform]: uname})["_id"]
                 collection.update_one(
                     {"_id": _id},
-                    {"$set": {"updated_date": now}}
+                    {"$set": {"updated_date": timestamp}}
                 )
             else:
                 user_document = {
                     "user": uname,
                     platforms[platform]: uname,
-                    "created_date": now,
-                    "updated_date": now
+                    "created_date": timestamp,
+                    "updated_date": timestamp
                 }
                 _id = collection.insert_one(user_document).inserted_id
             return _id
         raise ValueError("Unsupported Platform")
 
-    def add_message(self, uname, platform, message):
+    def add_message(self, uname, platform, message, timestamp=datetime.datetime.now(tz=datetime.timezone.utc)):
         """
         Adds a message to the 'messages' collection in the 'self.db' database
 
@@ -65,14 +65,13 @@ class MDBclient(pymongo.MongoClient):
             platform: Name of the platform (String)
             message: Contents of the message (String)
         """
-        _id = self.add_user(uname, platform)
+        _id = self.add_user(uname, platform, timestamp)
         collection = self[self.db]['messages']
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
         message_document = {
             "user_id": _id,
             "content": message,
             "platform": platform,
-            "date": now
+            "date": timestamp
         }
         collection.insert_one(message_document)
 
